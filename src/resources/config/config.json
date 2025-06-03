@@ -1,0 +1,38 @@
+{
+	"level_box_size": 20,
+	"invincible_mode_duration": 5000,
+	"fantasmas": [
+			{	
+				"id": "rojo",
+				"nombre": "Blinky",
+				"HvsV": 90,
+				"velocidad": 100,
+				"accuracy_threshold": 80,
+				"imageset": "rojo"
+			},
+			{
+				"id": "cian",
+				"nombre": "Inky",
+				"HvsV": 50,
+				"velocidad": 100,
+				"accuracy_threshold": 80,
+				"imageset": "cian"
+			},
+			{
+				"id": "rosado",
+				"nombre": "Pinky",
+				"HvsV": 10,
+				"velocidad": 100,
+				"accuracy_threshold": 80,
+				"imageset": "rosado"
+			},
+			{
+				"id": "naranja",
+				"nombre": "Blinky",
+				"HvsV": 50,
+				"velocidad": 100,
+				"accuracy_threshold": 40,
+				"imageset": "naranja"
+			}
+		]
+}

@@ -1,0 +1,329 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+package "nivel" #5DFF00 {
+    class CargadorDeNivel {
+        + cargarNivel(numeroDeNivel: int): Nivel
+        -getArchivoJSON()numeroDeNivel: int): JSONObject
+
+    }
+    class Nivel {
+        - patronDeImagenDeNivel: String
+        - celdas: int[][]
+        - numeroDeFilas: int
+        - numeroDeColumnas: int
+        - fantasmasEnNivel: String[]
+        - imagenes: HashMap<>
+        - comestible: Arraylist<>
+        - posicionInicialDelJugador: int[]
+        - posicionInicialFantasmaRojo: int[]
+        - posicionInicialFantasmaCian: int[]
+        - posicionInicialFantasmaNaranja: int[]
+        - posicionInicialFantasmaRosado: int[]
+        - configuracion: Configuracion
+
+        - crearImagen(nombreDeImagen: String, nombreDeArchivo: int): void
+        + setNombreDeCarpetaConPatronDeImagenes(patron: String): void
+        + getRutaDeAccesoConPatronDeImagenes(): String
+        + crearTableroDeCeldas(filas: int, columnas: int): void
+        + getNumeroDeFilas(): int
+        + getNumeroDeColumnas(): int
+        + getComestibles(): Array<Comestible>
+        + setCelda(fila: int, columna: int, valor: int): void
+        + getPosicionInicialDelJugador(): int[]
+        + getImagenDeCelda(filas: int, columnas: int): Image
+        + crearSetDeImagenes(): void
+        + convertirFilasAPixeles(fila: int, columna: int): int[]
+        + convertirPixelesEnCeldas(x: int, y: int): int[]
+        + getCeldaSuperior(fila: int, columna: int): int[]
+        + getCeldaInferior(fila: int, columna: int): int[]
+        + getCeldaIzquier(fila: int, columna: int): int[]
+        + getCeldaDerecha(fila: int, columna: int): int[]
+        + esNavegableLaCelda(fila: int, columna: int): boolean
+        + setFantasma(fantasmas: String[]): void
+        + getFantasmaEnElNivel(): String[]
+        + getPosicionInicialDelFantasma(id: String): int[]
+    }
+    class Tablero{
+        + timer: Timer
+        + jugador: Jugador
+        - configuracionDelJuego: Configuracion
+        - nivel: Nivel
+        - puntuacion: Puntuacion
+        - fantasmas: Arraylist
+        - fuenteDeTexto: Font
+        - modoInvisibles: boolean
+        - empiezaModoInvisible: Long
+
+        + arrancarJuego(): void
+        - configurarJuego(): void
+        - cargarFantasmas(): void
+        - calcularLaSiguienteDireccionEnColision(fantasma1: Fantasma,
+            fantasma2: Fantasma): void
+        - checkearColisionesDeFantasmas(fantasma: Fantasma): void
+        - checkearColisionJugadorFantasma(): void
+        - moverFantasmas(): void
+        - moverJugador(): void
+        - checkearComestible(): void
+        - tieneQueCambiarALaSiguienteDireccion(): void
+        - puedeMoverse(): boolean
+        - setModoInvisible(): void
+        - checkearModoInvisible(): void
+        - desactivarModoInvisible(): void
+        - estaCentradoElPersonaje(): boolean
+        - esnavegableLaSiguienteCelda(posicionDePersonaje: int[], siguienteDireccion:int)
+        - cargarJuego(): void
+        - paint(grafico: Graphics): void
+        - pintarFantasmas( g2d: Graphics): void
+        - pintarFondo(g2d: Graphics): void
+        - pintarComestibles(g2d: Graphics): void
+        - pintarElPuntajeEnEljuego(g2d: Graphics): void
+        - setFuenteDeTexto(): void
+    }
+}
+
+package "animacion" #CD00FF{
+    class Animacion{
+        - nombre: String
+        - duracion: int
+        - vuelta: int
+        - vueltaActual: int
+        - numeroDeImagen: int
+        - intervaloDeImagen: int
+        - tiemporInicioAnimacion: long
+        - imagenesAnimacion: Array<Image>
+
+        + getImagen(): Image
+        + reiniciarAnimacion(): void
+        - getNumeroDeFrame(): int
+    }
+    class ControladorDeAnimacion {
+        - animacionActual: String
+        - animaciones: HashMap<String, Animacion>
+
+        + agregarAnimacion(nombre: String, duracion: int,
+        vuelta: int, archivos: String[]): void
+        + getImagen(animacion: String): Image
+    }
+}
+package "comestibles" #0042FF{
+    abstract class Comestible{
+        - posicionX: int
+        - posicionY: int
+        - ancho: int
+        - altura: int
+        # image: Image
+        # puntos: int
+        # tipo: String
+
+        + getPosicionX(): int
+        + getPosicionY(): int
+        + getTipo(): String
+        + getPuntos(): int
+        + setPuntos(): void
+        + setSize(): void
+        + getLimite(): Rectangle
+
+    }
+    class Dot{
+        + Dot(posicionX: int, posicionY: int):Dot
+    }
+    class SuperDot{
+        + SuperDot(posicionX: int, posicionY: int): SuperDot
+    }
+}
+package "configuraciones" #F0DCC3{
+    class Configuracion{
+        - tamañoTablero: int
+        - duracionModoInvisible: long
+        - fantasmas:HashMap<String, FantasmaConfiguracion>
+        - instancia: Configuracion
+
+        + getInstancia(): Configuracion
+        + getTamañoPanel(): int
+        + getDuracionDeModoInvisible(): long
+        + getConfiguracionDeFantasma(): FantasmaConfiguracion
+        - getConfiguracionDelArchivo(): JSONObject
+    }
+    class FantasmaConfiguracion{
+        - id: String
+        - nombre: String
+        - setDeImagen: String
+        - velocidad: int
+        - umbralDePresicion: int
+        - HvsH: int
+
+        + getId(): String
+        + getImageSet():
+
+    }
+
+}
+package "interfazGrafica" #FF5733{
+    class VentanaJuego {
+        + pantallaPuntuacion: PantallaPuntuacion
+        + pantallaGameOver: PantallaGameOver
+        + tablero: Tablero
+        - pantallaGanador: PantallaGanador
+        - pantallaPausa: PantallaPausa
+        - jPanel: JPanel
+        - jBJugar: JButton
+        - jBSalir: JButton
+        - jLPortada: JLabel
+
+        + cargarPantallaGameOver(): void
+        - iniciarComponentes(): void
+        - setEventosDelTeclado(): void
+        - colocarBotones(): void
+        - colocarPanel(): void
+        - colocarLabel(): void
+    }
+    class PantallaGameOver{
+        - jLGameOver: JLabel
+        - jBVolverAjugar: JButton
+        - jBMenuPrincipal: JButton
+        - jBMenuPrincipal: JButton
+
+        - iniciarComponentes()
+        - colocarBotones(): void
+        - colocarLabel(): void
+    }
+    class PantallaGanador{
+        - jLGanador: JLabel
+        - jBVolverAJugar: JButton
+        - jBSalir: JButton
+
+        - iniciarComponentes(): void
+        - colocarLabel(): void
+        - colocarBotones(): void
+    }
+    class PantallaPausa{
+        - jBReanudar: JButton
+        - jLPausa: JLabel
+
+        - iniciarComponentes(): void
+        - colocarBotones(): void
+        - colocarLabel(): void
+    }
+    class PantallaPuntuacion{
+        - puntos: Puntuacion
+        - jBRegresar: JButton
+        - jBSalir: JButton
+
+        - iniciarComponentes(): void
+        - colocarBotones(): void
+        - pintarPuntuacion(): void
+        - paint(grafico: Graphics): void
+    }
+}
+package "personajes" #33FFE3{
+    class Movil{
+        + ARRIBA = 1: int
+        + ABAJO = 2: int
+        + DERECHA = 3: int
+        + IZQUIERDA = 4: int
+        - posicionX: int
+        - posicionY: int
+        - deltaX: int
+        - deltaY: int
+        - estaEnMovimiento: boolean
+        - velocidad: double
+        - direccionActual: int
+        - direccionSiguiente: int
+
+        + mover(): void
+        + getPosicion(): int[]
+        + getPosicionX(): int
+        + setPosicionX(posicionX: int): void
+        + getPosicionY(): int
+        + setPosicionY(posicionY: int): void
+        + getActualDireccion(): int
+        + getSiguienteDireccion(): int
+        + setSiguienteDireccion(direccion: int): void
+        + esPosicionSiguienteOpuestaAPosicionActual(): boolean
+        + cambiarADireccionSiguiente(): void
+        + setDireccionOpuesta(): void
+        - moverArriba(): void
+        - moverAbajo(): void
+        - moverDerecha(): void
+        - moverIzquierda(): void
+    }
+    class Jugador{
+        - ancho: int
+        - altura: int
+
+        + keyPressed(e: KeyEvent): void
+        + getBounds(): Rectangle
+        - controlDeAnimacion: ControladoDeAnimacion
+        - setImagenesDeJugador(): void
+        - getImage(): Image
+        - setSize(size: int): void
+    }
+    class Fantasma{
+        + PERSIGUE = 1: int
+        + ASUSTADO = 2: int
+        + MUERTO = 3: int
+        - seColisiono: boolean
+        - choque: Arraylist<String>
+        - inicioEstadoMuerto: long
+        - estado: int
+        - ancho: int
+        - altura: int
+        - HvsV: int
+        - umbralDePresicion: int
+        - id: String
+        - imageSet: String
+        - controlDeAnimacion: ControladorDeAnimacion
+
+        + getID(): String
+        + setTieneColision(chocado: boolean): void
+        + estaColisionadoConFantasma(id: String): boolean
+        + removerFantasma(id: String): void
+        + addFantasma(id: String): void
+        + getFantasmaColisionados(): int
+        + getEstado(): int
+        + setEstado(estadoNuevo: int): void
+        + comprobarTiempoEstadoMuerto(): void
+        + tieneColision(): boolean
+        + calcularSiguientePosicion(jugadorPosX: int, jugadorPosY: int): void
+        - cargarSetDeImagenes(): void
+        - getCarpetaDeSetDeImagenes(): String
+        - getImage(): Image
+        - getLimites(): Rectangle
+    }
+}
+package "puntuacion" #FFF000{
+    class Puntuacion{
+        - puntuacion: String
+        - textoPuntuacion: String
+        - puntuaciones: Arraylist<Integer>
+
+        + incrementarPuntuacion(valor: int): void
+        + agregarPuntuacion(): void
+        - leerArchivoDePuntuaciones(): void
+        + getPuntuacion(): String
+        + getPuntuacionesIndividuales(i: int): Integer
+        + getPuntuacionText(): String
+    }
+}
+VentanaJuego ---> Tablero
+VentanaJuego --> PantallaPuntuacion
+VentanaJuego --> PantallaPausa
+VentanaJuego --> PantallaGanador
+VentanaJuego --> PantallaGameOver
+Tablero -> Nivel
+Nivel -> CargadorDeNivel
+Nivel --> "personajes"
+Nivel --> "configuraciones"
+Nivel --> Configuracion
+Nivel --> Puntuacion
+Nivel -> "comestibles"
+Movil <|-- Fantasma
+Movil <|-- Jugador
+Comestible <|-L Dot
+Comestible <|- SuperDot
+"personajes" --> "animacion"
+Fantasma --> FantasmaConfiguracion
+Animacion --> ControladorDeAnimacion
+
+@enduml

@@ -1,0 +1,11 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Compiled output
+out/
+bin/
+target/
+
+# Libraries (uncomment if you want to exclude them)
+# libs/
