@@ -6,6 +6,7 @@
 out/
 bin/
 target/
+*.class
 
 # Libraries (uncomment if you want to exclude them)
 # libs/
