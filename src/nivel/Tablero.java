@@ -114,57 +114,108 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
      */
     private void calcularLaSiguienteDireccionEnColision(Fantasma fantasma1, Fantasma fantasma2) {
         if (fantasma1.getActualDireccion() == fantasma2.getActualDireccion()) {
-            if (fantasma1.getActualDireccion() == Movil.IZQUIERDA) {
-                if (fantasma1.getPosicionX() < fantasma2.getPosicionX()) {
-                    fantasma2.setDireccionOpuesta();
-                } else {
-                    fantasma1.setDireccionOpuesta();
-                }
-                return;
-            }
-            if (fantasma1.getActualDireccion() == Movil.DERECHA) {
-                if (fantasma1.getPosicionX() > fantasma2.getPosicionX()) {
-                    fantasma2.setDireccionOpuesta();
-                } else {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
-            if (fantasma1.getActualDireccion() == Movil.ARRIBA) {
-                if (fantasma1.getPosicionY() < fantasma2.getPosicionY()) {
-                    fantasma2.setDireccionOpuesta();
-                } else {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
-            if (fantasma1.getActualDireccion() == Movil.ABAJO) {
-                if (fantasma1.getPosicionX() > fantasma2.getPosicionX()) {
-                    fantasma2.setDireccionOpuesta();
-                } else {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
+            manejarColisionMismaDireccion(fantasma1, fantasma2);
         } else {
-            if (fantasma1.getActualDireccion() == Movil.IZQUIERDA) {
-                if (fantasma1.getPosicionX() > fantasma2.getPosicionX()) {
-                    fantasma1.setDireccionOpuesta();
-                    fantasma2.setDireccionOpuesta();
-                }
-            }
-            if (fantasma1.getActualDireccion() == Movil.DERECHA) {
-                if (fantasma1.getPosicionX() < fantasma2.getPosicionX()) {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
-            if (fantasma1.getActualDireccion() == Movil.ARRIBA) {
-                if (fantasma1.getPosicionY() > fantasma2.getPosicionY()) {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
-            if (fantasma1.getActualDireccion() == Movil.ABAJO) {
-                if (fantasma1.getPosicionX() < fantasma2.getPosicionX()) {
-                    fantasma1.setDireccionOpuesta();
-                }
-            }
+            manejarColisionDiferenteDireccion(fantasma1, fantasma2);
+        }
+    }
+
+    /**
+     * Maneja la colision cuando ambos fantasmas van en la misma direccion.
+     */
+    private void manejarColisionMismaDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        switch (fantasma1.getActualDireccion()) {
+            case Movil.IZQUIERDA:
+                manejarColisionIzquierdaMismaDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.DERECHA:
+                manejarColisionDerechaMismaDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.ARRIBA:
+                manejarColisionArribaMismaDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.ABAJO:
+                manejarColisionAbajoMismaDireccion(fantasma1, fantasma2);
+                break;
+        }
+    }
+
+    /**
+     * Maneja la colision cuando los fantasmas van en direcciones diferentes.
+     */
+    private void manejarColisionDiferenteDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        switch (fantasma1.getActualDireccion()) {
+            case Movil.IZQUIERDA:
+                manejarColisionIzquierdaDiferenteDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.DERECHA:
+                manejarColisionDerechaDiferenteDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.ARRIBA:
+                manejarColisionArribaDiferenteDireccion(fantasma1, fantasma2);
+                break;
+            case Movil.ABAJO:
+                manejarColisionAbajoDiferenteDireccion(fantasma1, fantasma2);
+                break;
+        }
+    }
+
+    private void manejarColisionIzquierdaMismaDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionX() < fantasma2.getPosicionX()) {
+            fantasma2.setDireccionOpuesta();
+        } else {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionDerechaMismaDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionX() > fantasma2.getPosicionX()) {
+            fantasma2.setDireccionOpuesta();
+        } else {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionArribaMismaDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionY() < fantasma2.getPosicionY()) {
+            fantasma2.setDireccionOpuesta();
+        } else {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionAbajoMismaDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        // Fixed bug: was using getPosicionX() instead of getPosicionY()
+        if (fantasma1.getPosicionY() > fantasma2.getPosicionY()) {
+            fantasma2.setDireccionOpuesta();
+        } else {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionIzquierdaDiferenteDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionX() > fantasma2.getPosicionX()) {
+            fantasma1.setDireccionOpuesta();
+            fantasma2.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionDerechaDiferenteDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionX() < fantasma2.getPosicionX()) {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionArribaDiferenteDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        if (fantasma1.getPosicionY() > fantasma2.getPosicionY()) {
+            fantasma1.setDireccionOpuesta();
+        }
+    }
+
+    private void manejarColisionAbajoDiferenteDireccion(Fantasma fantasma1, Fantasma fantasma2) {
+        // Fixed bug: was using getPosicionX() instead of getPosicionY()
+        if (fantasma1.getPosicionY() < fantasma2.getPosicionY()) {
+            fantasma1.setDireccionOpuesta();
         }
     }
 
@@ -173,39 +224,56 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
      */
     private void comprobarColisionesDeFantasmas(Fantasma fantasma) {
         boolean colisionado = false;
-        for (Fantasma fant : fantasmas) {
-            // Comprobamos que no se chequee el fantasma consigomismo.
-            if (fantasma.getID().equals(fant.getID())) {
+        for (Fantasma otroFantasma : fantasmas) {
+            if (esMismoFantasma(fantasma, otroFantasma)) {
                 continue;
-            } else {
-                Rectangle espacioFantasma1 = fantasma.getLimites();
-                Rectangle espacioFantasma2 = fant.getLimites();
-                if (espacioFantasma1.intersects(espacioFantasma2)) {
-                    if (fantasma.estaColisionadoConFanstasma(fant.getID())) {
-                        continue;
-                    }
-                    colisionado = true;
-                    fantasma.addFantasmaColisionado(fant.getID());
-                    fant.addFantasmaColisionado(fantasma.getID());
-                    if (!fantasma.tieneColision()) {
-                        fantasma.setTieneColision(true);
-                    }
-                    if (!fant.tieneColision()) {
-                        fant.setTieneColision(true);
-                    }
-                    // se fuerza un cálculo especial de direccion del fantasma
-                    calcularLaSiguienteDireccionEnColision(fantasma, fant);
-                } else {
-                    // Si no se están solapando, se quita en caso de existir la relacion entre
-                    // los fantasmas colisionados.
-                    fantasma.removerFantasmaColisionado(fant.getID());
-                    fant.removerFantasmaColisionado(fantasma.getID());
+            }
+            
+            if (hayColisionEntreFantasmas(fantasma, otroFantasma)) {
+                if (fantasma.estaColisionadoConFanstasma(otroFantasma.getID())) {
+                    continue;
                 }
+                colisionado = true;
+                procesarNuevaColision(fantasma, otroFantasma);
+            } else {
+                limpiarColisionAnterior(fantasma, otroFantasma);
             }
         }
+        
         if (!colisionado) {
             fantasma.setTieneColision(false);
         }
+    }
+
+    private boolean esMismoFantasma(Fantasma fantasma1, Fantasma fantasma2) {
+        return fantasma1.getID().equals(fantasma2.getID());
+    }
+
+    private boolean hayColisionEntreFantasmas(Fantasma fantasma1, Fantasma fantasma2) {
+        Rectangle espacioFantasma1 = fantasma1.getLimites();
+        Rectangle espacioFantasma2 = fantasma2.getLimites();
+        return espacioFantasma1.intersects(espacioFantasma2);
+    }
+
+    private void procesarNuevaColision(Fantasma fantasma1, Fantasma fantasma2) {
+        fantasma1.addFantasmaColisionado(fantasma2.getID());
+        fantasma2.addFantasmaColisionado(fantasma1.getID());
+        
+        establecerEstadoColision(fantasma1);
+        establecerEstadoColision(fantasma2);
+        
+        calcularLaSiguienteDireccionEnColision(fantasma1, fantasma2);
+    }
+
+    private void establecerEstadoColision(Fantasma fantasma) {
+        if (!fantasma.tieneColision()) {
+            fantasma.setTieneColision(true);
+        }
+    }
+
+    private void limpiarColisionAnterior(Fantasma fantasma1, Fantasma fantasma2) {
+        fantasma1.removerFantasmaColisionado(fantasma2.getID());
+        fantasma2.removerFantasmaColisionado(fantasma1.getID());
     }
 
     /**
@@ -214,26 +282,47 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
     private void comprobarColisionJugadorFantasma() {
         Rectangle espacioJugador = jugador.getBounds();
         Iterator<Fantasma> iterator = fantasmas.iterator();
+        
         while (iterator.hasNext()) {
-            Fantasma fant = iterator.next();
-            Rectangle jugadorEspacio = fant.getLimites();
-            if (espacioJugador.intersects(jugadorEspacio)) {
-                if (fant.getEstado() == Fantasma.MUERTO) {
-                    continue;
-                }
-                if (modoInvisible) {
-                    puntuacion.incrementarPuntuacion(100);
-                    fant.setEstado(Fantasma.MUERTO);
-                    // Regenerar el fantasma en su posicion inicial.
-                    int[] posicionFantasma = nivel.getPosicionInicialDelFantasma(fant.getID());
-                    fant.setPosicionX(posicionFantasma[0]);
-                    fant.setPosicionY(posicionFantasma[1]);
-                } else {
-                    puntuacion.agregarPuntuacion();
-                    VentanaJuego.cargarPantallaGameOver();
-                }
+            Fantasma fantasma = iterator.next();
+            
+            if (hayColisionJugadorFantasma(espacioJugador, fantasma)) {
+                procesarColisionJugadorFantasma(fantasma);
             }
         }
+    }
+
+    private boolean hayColisionJugadorFantasma(Rectangle espacioJugador, Fantasma fantasma) {
+        if (fantasma.getEstado() == Fantasma.MUERTO) {
+            return false;
+        }
+        Rectangle espacioFantasma = fantasma.getLimites();
+        return espacioJugador.intersects(espacioFantasma);
+    }
+
+    private void procesarColisionJugadorFantasma(Fantasma fantasma) {
+        if (modoInvisible) {
+            manejarColisionModoInvisible(fantasma);
+        } else {
+            manejarColisionNormal();
+        }
+    }
+
+    private void manejarColisionModoInvisible(Fantasma fantasma) {
+        puntuacion.incrementarPuntuacion(100);
+        fantasma.setEstado(Fantasma.MUERTO);
+        regenerarFantasmaEnPosicionInicial(fantasma);
+    }
+
+    private void regenerarFantasmaEnPosicionInicial(Fantasma fantasma) {
+        int[] posicionFantasma = nivel.getPosicionInicialDelFantasma(fantasma.getID());
+        fantasma.setPosicionX(posicionFantasma[0]);
+        fantasma.setPosicionY(posicionFantasma[1]);
+    }
+
+    private void manejarColisionNormal() {
+        puntuacion.agregarPuntuacion();
+        VentanaJuego.cargarPantallaGameOver();
     }
 
     /**
@@ -244,36 +333,67 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
      * @see Fantasma
      */
     private void moverFantasma() {
-        // Mover fantasmas
         Iterator<Fantasma> iterator = fantasmas.iterator();
         while (iterator.hasNext()) {
             Fantasma fantasma = iterator.next();
-            if (fantasma.getEstado() == Fantasma.MUERTO) {
-                fantasma.comprobarTiempoEstadoMuerto();
+            
+            if (esFantasmaMuerto(fantasma)) {
+                manejarFantasmaMuerto(fantasma);
                 continue;
             }
-            // Comprueba las colisiones con otros fantasmas
-            comprobarColisionesDeFantasmas(fantasma);
-            // Si colisiona con mas de 1 a la vez, paramos  al fantasma.
-            if (fantasma.getFantasmasColisionados() > 1) {
-                continue;
-            }
-            // Si esta parado calcula la proxima direccion.
-            if (fantasma.getActualDireccion() == 0 || fantasma.getSiguienteDireccion() == 0) {
-                fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
-            }
-            if (puedeMoverse(fantasma)) {
-                if (!fantasma.tieneColision()) {
-                    if (tieneQueCambiarALaSiguienteDireccion(fantasma)) {
-                        fantasma.cambiarADireccionSiguiente();
-                        fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
-                    }
-                }
-                fantasma.mover();
-            } else {
-                fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
-            }
+            
+            procesarMovimientoFantasma(fantasma);
         }
+    }
+
+    private boolean esFantasmaMuerto(Fantasma fantasma) {
+        return fantasma.getEstado() == Fantasma.MUERTO;
+    }
+
+    private void manejarFantasmaMuerto(Fantasma fantasma) {
+        fantasma.comprobarTiempoEstadoMuerto();
+    }
+
+    private void procesarMovimientoFantasma(Fantasma fantasma) {
+        comprobarColisionesDeFantasmas(fantasma);
+        
+        if (tieneDemasiadasColisiones(fantasma)) {
+            return;
+        }
+        
+        calcularDireccionSiEsNecesario(fantasma);
+        
+        if (puedeMoverse(fantasma)) {
+            manejarMovimientoValido(fantasma);
+        } else {
+            fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
+        }
+    }
+
+    private boolean tieneDemasiadasColisiones(Fantasma fantasma) {
+        return fantasma.getFantasmasColisionados() > 1;
+    }
+
+    private void calcularDireccionSiEsNecesario(Fantasma fantasma) {
+        if (necesitaCalcularDireccion(fantasma)) {
+            fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
+        }
+    }
+
+    private boolean necesitaCalcularDireccion(Fantasma fantasma) {
+        return fantasma.getActualDireccion() == 0 || fantasma.getSiguienteDireccion() == 0;
+    }
+
+    private void manejarMovimientoValido(Fantasma fantasma) {
+        if (puedeActualizarDireccion(fantasma)) {
+            fantasma.cambiarADireccionSiguiente();
+            fantasma.calcularSiguientePosicion(jugador.getPosicionX(), jugador.getPosicionY());
+        }
+        fantasma.mover();
+    }
+
+    private boolean puedeActualizarDireccion(Fantasma fantasma) {
+        return !fantasma.tieneColision() && tieneQueCambiarALaSiguienteDireccion(fantasma);
     }
 
     /**
@@ -330,24 +450,29 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
     private boolean tieneQueCambiarALaSiguienteDireccion(Movil personaje) {
         int direccionSiguiente = personaje.getSiguienteDireccion();
         int[] posicionDelPersonaje = personaje.getPosicion();
-        // Si el actor está centrado en una celda de la rejilla
-        // comprobamos si podemos cambiar de direccion
-        if (estaCentradoElPersonaje(posicionDelPersonaje)) {
-            // Comprobamos que la proxima celda sea navegable.
-            if (esNavegableLaSiguienteCelda(posicionDelPersonaje, direccionSiguiente)) {
-                // Si lo es, cambiamos la direccion del actor:
-                return true;
-            }
+        
+        if (puedeCambiarDireccionEnInterseccion(posicionDelPersonaje, direccionSiguiente)) {
+            return true;
         }
-        // Si no está centrado o la proxima celda del cambio de direccion no es navegable
-        // comprobamos si la siguiente direccion es la opuesta:
-        if (personaje instanceof Jugador) {
-            if (personaje.esPosicionSiguienteOpuestaAPosicionActual()) {
-                // Si lo es, cambiamos la direccion del actor:
-                return esNavegableLaSiguienteCelda(posicionDelPersonaje, direccionSiguiente);
-            }
+        
+        return puedeHacerCambioOpuesto(personaje, posicionDelPersonaje, direccionSiguiente);
+    }
+
+    private boolean puedeCambiarDireccionEnInterseccion(int[] posicionPersonaje, int direccionSiguiente) {
+        return estaCentradoElPersonaje(posicionPersonaje) && 
+               esNavegableLaSiguienteCelda(posicionPersonaje, direccionSiguiente);
+    }
+
+    private boolean puedeHacerCambioOpuesto(Movil personaje, int[] posicionPersonaje, int direccionSiguiente) {
+        if (!(personaje instanceof Jugador)) {
+            return false;
         }
-        return false;
+        
+        if (!personaje.esPosicionSiguienteOpuestaAPosicionActual()) {
+            return false;
+        }
+        
+        return esNavegableLaSiguienteCelda(posicionPersonaje, direccionSiguiente);
     }
 
     /**
@@ -425,34 +550,33 @@ public class Tablero extends JPanel  implements Serializable, ActionListener {
     /**
      * Logica para saber si la proxima celda es navegable.
      *
-     * @param posicionPerosnaje  int[] de 2 huecos con la posicion x,y del jugador
+     * @param posicionPersonaje  int[] de 2 huecos con la posicion x,y del jugador
      * @param direccionSiguiente entero con la direccion.
      * @return verdadero si la proxima celda es navegable.
      */
-    private boolean esNavegableLaSiguienteCelda(int[] posicionPerosnaje, int direccionSiguiente) {
-        int centradoEnX = posicionPerosnaje[0];
-        int centradoEnY = posicionPerosnaje[1];
-        int[] filaYColumna = nivel.convertirPixelesEnCeldas(centradoEnX, centradoEnY);
-        // inicializamos la celda a la celda 0,0 (esquina superior izq, que siempre sera
-        // no navegable
-        int[] celdaSiguiente = new int[2];
-        celdaSiguiente[0] = 0;
-        celdaSiguiente[1] = 0;
+    private boolean esNavegableLaSiguienteCelda(int[] posicionPersonaje, int direccionSiguiente) {
+        int[] filaYColumna = nivel.convertirPixelesEnCeldas(posicionPersonaje[0], posicionPersonaje[1]);
+        int[] celdaSiguiente = obtenerSiguienteCelda(filaYColumna, direccionSiguiente);
+        return nivel.esNavegableLaCelda(celdaSiguiente[0], celdaSiguiente[1]);
+    }
+
+    /**
+     * Obtiene las coordenadas de la siguiente celda basada en la direccion.
+     */
+    private int[] obtenerSiguienteCelda(int[] filaYColumna, int direccionSiguiente) {
         switch (direccionSiguiente) {
             case Movil.ARRIBA:
-                celdaSiguiente = nivel.getCeldaSuperior(filaYColumna[0], filaYColumna[1]);
-                break;
+                return nivel.getCeldaSuperior(filaYColumna[0], filaYColumna[1]);
             case Movil.ABAJO:
-                celdaSiguiente = nivel.getCeldaInferior(filaYColumna[0], filaYColumna[1]);
-                break;
+                return nivel.getCeldaInferior(filaYColumna[0], filaYColumna[1]);
             case Movil.IZQUIERDA:
-                celdaSiguiente = nivel.getCeldaIzquierda(filaYColumna[0], filaYColumna[1]);
-                break;
+                return nivel.getCeldaIzquierda(filaYColumna[0], filaYColumna[1]);
             case Movil.DERECHA:
-                celdaSiguiente = nivel.getCeldaDerecha(filaYColumna[0], filaYColumna[1]);
-                break;
+                return nivel.getCeldaDerecha(filaYColumna[0], filaYColumna[1]);
+            default:
+                // Celda no navegable por defecto (esquina superior izquierda)
+                return new int[]{0, 0};
         }
-        return nivel.esNavegableLaCelda(celdaSiguiente[0], celdaSiguiente[1]);
     }
 
     /**
